@@ -1,0 +1,107 @@
+from tkinter import *
+import random
+
+eesnimi = input("Sisesta oma eesnimi: ")
+perenimi = input("Sisesta oma perekonnanimi: ")
+synni = input("Sisesta oma sünnipäev (nt 01.01.2000): ")
+vanus = ""
+kontroll = "jah"
+while kontroll == "jah":
+    vanus = input("Kui vana sa oled? ")
+    numbrid = "0123456789"
+    i = 0
+    leitud = "ei"
+    while i < len(vanus):
+        märk = vanus[i]
+        if märk not in numbrid:
+            leitud = "jah"
+        i = i + 1
+    if leitud == "ei" and vanus != "":
+        kontroll = "ei"
+
+vanus = int(vanus)
+täisnimi = eesnimi + " " + perenimi
+ohupalle = 0
+kook = "ei"
+kingitus = "ei"
+veel = "jah"
+while veel == "jah":
+    print("Mida soovid oma sünnipäevakaardile?")
+    valik = input("Kas soovid: õhupalle / kooki / kingitust / kõike? ")
+    valik = valik.lower()
+    if valik == "õhupalle":
+        mitu = ""
+        kontroll2 = "jah"
+        while kontroll2 == "jah":
+            mitu = input("Mitu õhupalli soovid? ")
+            i = 0
+            viga = "ei"
+            while i < len(mitu):
+                if mitu[i] not in "0123456789":
+                    viga = "jah"
+                i = i + 1
+            if viga == "ei" and mitu != "":
+                kontroll2 = "ei"
+        ohupalle = int(mitu)
+    elif valik == "kooki":
+        kook = "jah"
+    elif valik == "kingitust":
+        kingitus = "jah"
+    elif valik == "kõike":
+        mitu = ""
+        kontroll3 = "jah"
+        while kontroll3 == "jah":
+            mitu = input("Mitu õhupalli soovid? ")
+            i = 0
+            viga = "ei"
+            while i < len(mitu):
+                if mitu[i] not in "0123456789":
+                    viga = "jah"
+                i = i + 1
+            if viga == "ei" and mitu != "":
+                kontroll3 = "ei"
+        ohupalle = int(mitu)
+        kook = "jah"
+        kingitus = "jah"
+    else:
+        print("Tundmatu valik, proovi uuesti.")
+   
+    veel = input("Kas soovid midagi veel lisada? (jah/ei): ")
+    veel = veel.lower()
+
+aken = Tk()
+aken.title("Sünnipäevakaart")
+
+canvas = Canvas(aken, width=400, height=500, bg="lightyellow")
+canvas.pack()
+
+canvas.create_text(200, 30, text="Head sünnipäeva, " + täisnimi + "!", font=("Comic Sans MS", 18, "bold"), fill="blue")
+canvas.create_text(200, 60, text="Sündinud: " + synni, font=("Comic Sans MS", 12), fill="darkblue")
+
+if kingitus == "jah":
+    canvas.create_rectangle(100, 370, 300, 430, fill="pink")
+    canvas.create_line(200, 370, 200, 430, fill="red", width=5)
+    canvas.create_line(100, 400, 300, 400, fill="red", width=5)
+    canvas.create_text(200, 450, text="Palju õnne, " + eesnimi + "!", font=("Comic Sans MS", 14), fill="black")
+    canvas.create_text(200, 470, text=str(vanus + 1) + " saamise puhul!", font=("Comic Sans MS", 14), fill="black")
+
+i = 0
+while i < ohupalle:
+    x = random.randint(50, 350)
+    y = random.randint(50, 250)
+    r = 20
+    värv = random.choice(["red", "blue", "green", "yellow", "orange"])
+    canvas.create_oval(x - r, y - r, x + r, y + r, fill=värv)
+    canvas.create_line(x, y + r, x, y + r + 30, fill="black")
+    i = i + 1
+
+if kook == "jah":
+    canvas.create_rectangle(150, 300, 250, 350, fill="brown", outline="black")
+    i = 0
+    while i < vanus + 1 and (155 + i * 7) <= 245:
+        x = 155 + (i * 7)
+        canvas.create_rectangle(x, 280, x + 4, 300, fill="orange")
+        canvas.create_oval(x - 1, 275, x + 5, 280, fill="yellow")
+        i = i + 1
+
+aken.mainloop()
